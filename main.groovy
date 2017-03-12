@@ -1,4 +1,5 @@
 import static groovy.io.FileType.FILES
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
 import javax.imageio.ImageIO
 import javax.imageio.stream.FileImageInputStream
@@ -36,6 +37,11 @@ imageInputPath.eachFile(FILES, {
 
     def destinationPath = Paths.get(imageOutputPath.toString(), it.getFileName().toString() + ".jpg")
 
-    Files.copy(it, destinationPath, StandardCopyOption.REPLACE_EXISTING)
+    if(Files.exists(destinationPath))
+        return
+
+    Files.copy(it, destinationPath, REPLACE_EXISTING)
     println "Copied: ${destinationPath}"
 })
+
+println "Done"
